@@ -38,23 +38,22 @@ class MainActivity : AppCompatActivity() {
         val projections = arrayOf("ID", "Title", "Description")
         val selectionArgs = arrayOf(title)
 
-        val cursor = dbManager.DatabaseHelperNotes(this).Query(projections,
-            "Title like ?", selectionArgs, "Title")
+        val cursor = dbManager.DatabaseHelperNotes(this).Query(
+            projections,
+            "Title like ?", selectionArgs, "Title"
+        )
         listNotes.clear()
         if (cursor.moveToFirst()) {
             do {
-                val ID  = cursor.getInt(cursor.getColumnIndex("ID"))
-                val Title = cursor.getString(cursor.getColumnIndex("Title"))
-                val Description = cursor.getString(cursor.getColumnIndex("Description"))
-                listNotes.add(Note(ID, Title, Description))
+                val nodeId = cursor.getInt(cursor.getColumnIndex("ID"))
+                val title = cursor.getString(cursor.getColumnIndex("Title"))
+                val description = cursor.getString(cursor.getColumnIndex("Description"))
+                listNotes.add(Note(nodeId, title, description))
             } while (cursor.moveToNext())
         }
 
-        //adapter
-        var myNotesAdapter = MyNotesAdapter(this, listNotes)
-
         //set adapter
-        notesLv.adapter = myNotesAdapter
+        notesLv.adapter = MyNotesAdapter(this, listNotes)
 
         //get total number of tasks from ListView
         val total = notesLv.count
@@ -71,17 +70,17 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.main_menu, menu)
 
         //searchView
-        val sv: SearchView = menu!!.findItem(R.id.app_bar_search).actionView as SearchView
+        val sv = menu?.findItem(R.id.app_bar_search)?.actionView as SearchView?
         val sm = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        sv.setSearchableInfo(sm.getSearchableInfo(componentName))
-        sv.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        sv?.setSearchableInfo(sm.getSearchableInfo(componentName))
+        sv?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                LoadQuery("%" + query + "%")
+                LoadQuery("%$query%")
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                LoadQuery("%" + newText + "%")
+                LoadQuery("%$newText%")
                 return false
             }
         })
@@ -122,9 +121,9 @@ class MainActivity : AppCompatActivity() {
                 LoadQuery("%")
             }
             //edit//update button click
-            myView.setOnClickListener{ GoToUpdateFun(myNote) }
+            myView.setOnClickListener { GoToUpdateFun(myNote) }
             //copy btn click
-            myView.copyBtn.setOnClickListener{
+            myView.copyBtn.setOnClickListener {
                 //get title
                 val title = myView.titleTv.text.toString()
                 //get description
@@ -136,7 +135,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this@MainActivity, "Copied...", Toast.LENGTH_SHORT).show()
             }
             //share btn click
-            myView.shareBtn.setOnClickListener{
+            myView.shareBtn.setOnClickListener {
                 //get title
                 val title = myView.titleTv.text.toString()
                 //get description
