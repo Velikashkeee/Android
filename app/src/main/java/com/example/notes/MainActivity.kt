@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun LoadQuery(title: String) {
         var dbManager = DBManager(this)
-        val projections = arrayOf("ID", "Title", "Description")
+        val projections = arrayOf("ID", "Title", "Description", "CreatedAt")
         val selectionArgs = arrayOf(title)
 
         val cursor = dbManager.DatabaseHelperNotes(this).Query(
@@ -113,6 +113,7 @@ class MainActivity : AppCompatActivity() {
             val myNote = listNotesAdapter[position]
             myView.titleTv.text = myNote.nodeName
             myView.descTv.text = myNote.nodeDes
+            myView.createdAt.text = myNote.createdAt.time.toString()
             //delete button click
             myView.deleteBtn.setOnClickListener {
                 var dbManager = DBManager(this.context!!)
@@ -128,8 +129,9 @@ class MainActivity : AppCompatActivity() {
                 val title = myView.titleTv.text.toString()
                 //get description
                 val desc = myView.descTv.text.toString()
+                val createdAt = myView.createdAt.text.toString()
                 //concatenate
-                val s = title + "\n" + desc
+                val s = title + "\n" + desc + "\n" + createdAt
                 val cb = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 cb.text = s //add to clipboard
                 Toast.makeText(this@MainActivity, "Copied...", Toast.LENGTH_SHORT).show()
@@ -140,8 +142,9 @@ class MainActivity : AppCompatActivity() {
                 val title = myView.titleTv.text.toString()
                 //get description
                 val desc = myView.descTv.text.toString()
+                val createdAt = myView.createdAt.text.toString()
                 //concatenate
-                val s = title + "\n" + desc
+                val s = title + "\n" + desc + "\n" + createdAt
                 val shareIntent = Intent()
                 shareIntent.action = Intent.ACTION_SEND
                 shareIntent.type = "text/plain"
@@ -170,6 +173,7 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra("ID", myNote.nodeID) //put id
         intent.putExtra("name", myNote.nodeName) //put name
         intent.putExtra("des", myNote.nodeDes) //put decription
+        intent.putExtra("createdAt", myNote.createdAt) //put createdAt
         startActivity(intent) //start activity
     }
 }

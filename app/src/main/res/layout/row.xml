@@ -97,5 +97,10 @@
                     android:src="@drawable/note_delete"/>
             </LinearLayout>
         </LinearLayout>
+        <TextView
+            android:id="@+id/createdAt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
