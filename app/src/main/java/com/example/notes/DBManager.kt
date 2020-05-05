@@ -20,12 +20,14 @@ class DBManager {
     var colID = "ID"
     var colTitle = "Title"
     var colDes = "Description"
+    var colCreatedAt = "CreatedAt"
 
     //database version
-    var dbVersion = 1
+    var dbVersion = 2
 
-    val sqlCreateTable = "CREATE TABLE IF NOT EXISTS " + dbTable + " (" + colID+
-            " INTIGER PRIMARY KEY, " + colTitle + " TEXT, " +colDes + " TEXT);"
+    val sqlCreateTable = "CREATE TABLE IF NOT EXISTS " + dbTable + " (" + colID +
+            " INTEGER PRIMARY KEY, " + colTitle + " TEXT, " + colDes +
+            " TEXT, " + colCreatedAt + " TEXT);"
 
     var sqlDB: SQLiteDatabase? = null
 
@@ -47,7 +49,8 @@ class DBManager {
         }
 
         override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-            db!!.execSQL("Drop table if Exists" + dbTable)
+            db!!.execSQL("Drop table if Exists " + dbTable)
+            db.execSQL(sqlCreateTable)
         }
 
         fun insert(values: ContentValues) : Long {

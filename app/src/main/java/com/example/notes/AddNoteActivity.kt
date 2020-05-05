@@ -1,12 +1,16 @@
 package com.example.notes
 
 import android.content.ContentValues
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_add_note.*
+import kotlinx.android.synthetic.main.row.*
 import java.lang.Exception
+import java.time.LocalDateTime
 
 class AddNoteActivity : AppCompatActivity() {
 
@@ -23,17 +27,18 @@ class AddNoteActivity : AppCompatActivity() {
             if (id != 0) {
                 titleEt.setText(bundle.getString("name"))
                 descEt.setText(bundle.getString("des"))
+                createdAt.setText(bundle.getString("createdAt"))
             }
         } catch (ex: Exception){}
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun addFunc(view: View) {
         var dbManager = DBManager(this)
-
         var values = ContentValues()
+        values.put("CreatedAt", LocalDateTime.now().toString())
         values.put("Title", titleEt.text.toString())
         values.put("Description", descEt.text.toString())
-
         if (id == 0) {
             val ID = dbManager.DatabaseHelperNotes(this).insert(values)
             if (ID>0) {
